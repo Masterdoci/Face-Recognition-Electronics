@@ -1,7 +1,9 @@
+from re import A
 import face_recognition
 import cv2
 import numpy as np
 import serial
+import os
 SIZE_OF_ANSWER = 2
 GOOD_ANSWER = "OK"
 ser = serial.Serial('COM8', 9600, timeout=0)
@@ -56,22 +58,23 @@ while True:
             name = "Unknown"
 
          
-
             # Or instead, use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            print(face_distances.size)
+            
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = known_face_names[best_match_index]
                 
             face_names.append(name)
             if name != "Unknown":
-                ser.write(name.encode())
-                while True:
-                    txt = ser.readline()
-                    if txt == "OK":
-                        break
-                    print(f"Got text: {txt}")
-                print("Succedded")
+                ser.write((name + "#").encode())
+                index = known_face_names.index(name)
+                del known_face_names[index]
+                del known_face_encodings[index]
+                if known_face_encodings == []:
+                    ser.write("Done#".encode())
+                    os._exit(0)
                                     
 
     process_this_frame = not process_this_frame
