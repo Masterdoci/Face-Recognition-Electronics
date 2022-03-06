@@ -41,13 +41,34 @@ void setup()
   while (!Serial) {
     ; // wait for serial port to connect. Needed for Native USB only
   }
-
+    Serial.println("start p...");
 
 
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
 
 }
+
+void loop() { // run over and over
+  char message[1024] = "";
+  String msg;
+  if (mySerial.available())
+  {
+    msg = mySerial.readStringUntil('#');
+    //readUntil(message , '#');
+    Serial.println("before print");
+    Serial.print(msg);
+    Serial.println("????");
+    /*for (int i = 0; i < 15; i++)
+    {
+      Serial.println(message[i]);
+    } 
+    */   
+    //printName(message);
+    
+  }
+}
+
 void readUntil(char message[], char terminator) {
   int i = 0;
   while (true) {
@@ -61,15 +82,6 @@ void readUntil(char message[], char terminator) {
     }
   }
 }
-void loop() { // run over and over
-  char message[1024] = "";
-  if (mySerial.available())
-  {
-    readUntil(message , '#');
-    printName(message);
-  }
-}
-
 
 void printName(char message[]) {
   char date[1024] = "";

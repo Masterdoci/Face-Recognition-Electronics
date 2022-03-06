@@ -68,6 +68,7 @@ while True:
                 
             face_names.append(name)
             if name != "Unknown":
+                print(name)
                 ser.write((name + "#").encode())
                 index = known_face_names.index(name)
                 del known_face_names[index]
