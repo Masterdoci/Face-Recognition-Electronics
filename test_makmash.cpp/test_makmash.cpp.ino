@@ -56,14 +56,12 @@ void loop() { // run over and over
   {
     msg = mySerial.readStringUntil('#');
     //readUntil(message , '#');
-    Serial.println("before print");
-    Serial.print(msg);
-    Serial.println("????");
-    /*for (int i = 0; i < 15; i++)
-    {
-      Serial.println(message[i]);
-    } 
-    */   
+    Serial.println(msg);
+    Serial.print("enter time: ");
+    char date[1024] = "";
+    getDate(date);
+    Serial.println(date);
+
     //printName(message);
     
   }
