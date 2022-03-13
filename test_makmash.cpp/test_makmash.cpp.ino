@@ -25,6 +25,9 @@
   This example code is in the public domain.
 
 */
+
+#include <SPI.h>
+#include <ISD4004.h>
 #include "TFT9341Touch.h"
 #include <Wire.h>
 #include <RTC.h>
@@ -33,8 +36,15 @@
 SoftwareSerial mySerial(A1, A1); // RX, TX
 static DS1307 RTC;
 
+#define recordPin  2
+//#define ledPin   13 
+
+ISD4004 my_voice(6,8);//ss,int
+
+
 void setup()
 {
+  pinMode(recordPin, INPUT_PULLUP);
   RTC.begin();
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
@@ -52,16 +62,18 @@ void setup()
 void loop() { // run over and over
   char message[1024] = "";
   String msg;
+  //  my_voice.PlayInt(100);
   if (mySerial.available())
   {
     msg = mySerial.readStringUntil('#');
     //readUntil(message , '#');
+    my_voice.PlayInt(80);
     Serial.println(msg);
     Serial.print("enter time: ");
     char date[1024] = "";
     getDate(date);
     Serial.println(date);
-
+    
     //printName(message);
     
   }
