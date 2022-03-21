@@ -39,66 +39,75 @@ SoftwareSerial mySerial(A1, A1); // RX, TX
 static DS1307 RTC;
 
 #define recordPin  2
-//#define ledPin   13 
 
 ISD4004 my_voice(6,8);//ss,int
 
 
 void setup()
 {
+  // init the servo.
   myservo.attach(4);
   myservo.write(0);
-  pinMode(recordPin, INPUT_PULLUP);
+
+//  pinMode(recordPin, INPUT_PULLUP);
   RTC.begin();
+
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  while (!Serial) {
+  
+  while (!Serial)
+  {
     ; // wait for serial port to connect. Needed for Native USB only
   }
-    Serial.println("start p...");
-
+    Serial.println("start project - employees sistem.");
 
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
 
 }
 
-void loop() { // run over and over
+void loop() { 
+  // run over and over
   char message[1024] = "";
   String msg;
   //  my_voice.PlayInt(100);
   if (mySerial.available())
   {
     msg = mySerial.readStringUntil('#');
-    //readUntil(message , '#');
-    Serial.println(msg);
-    login_employee();
+
+    login_employee(msg);
     // my_voice.PlayInt(80); לא זוהה
-    Serial.print("enter time: ");
-    char date[1024] = "";
-    getDate(date);
-    Serial.println(date);
-    
-    //printName(message);
-    
   }
 }
 
-
-void login_employee()
+void login_employee(String user_name)
 {
+  // open the door and voice msg to the employee.
   my_voice.PlayInt(100);
   myservo.write(90);
-  delay(2000);
+  delay(5000);
   myservo.write(0);
+
+  //print the employee name.
+  Serial.println(user_name);
+  
+  // print the details of the login employee.
+  Serial.print("enter time: ");
+  char date[1024] = "";
+  getDate(date);
+  Serial.println(date);
 }
 
-void readUntil(char message[], char terminator) {
+void readUntil(char message[], char terminator)
+{
   int i = 0;
-  while (true) {
-    if (mySerial.available()) {
+  while (true)
+  {
+    if (mySerial.available())
+    {
       message[i] = mySerial.read();
-      if (message[i] == terminator) {
+      if (message[i] == terminator)
+      {
         message[i] = '\0';
         break;
       }
@@ -107,16 +116,8 @@ void readUntil(char message[], char terminator) {
   }
 }
 
-void printName(char message[]) {
-  char date[1024] = "";
-  char logOutput[1024] = "";
-  getDate(date);
-  sprintf(logOutput , "%s: %s Entered", date , message);
-  Serial.println("To do");
-  Serial.println(logOutput);
-}
-
-void getDate(char date[]){
+void getDate(char date[])
+{
   sprintf(date, "%d-%d-%d %d:%d:%d",
     RTC.getDay(),
     RTC.getMonth(),
