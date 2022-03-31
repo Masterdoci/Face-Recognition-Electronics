@@ -60,7 +60,6 @@ while True:
          
             # Or instead, use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-            print(face_distances.size)
             
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
@@ -74,7 +73,6 @@ while True:
                 del known_face_names[index]
                 del known_face_encodings[index]
                 if known_face_encodings == []:
-                    ser.write("Done#".encode())
                     os._exit(0)
                                     
 

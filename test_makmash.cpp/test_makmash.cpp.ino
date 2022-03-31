@@ -67,16 +67,11 @@ void setup()
 }
 
 void loop() { 
-  // run over and over
-  char message[1024] = "";
   String msg;
-  //  my_voice.PlayInt(100);
   if (mySerial.available())
   {
     msg = mySerial.readStringUntil('#');
-
     login_employee(msg);
-    // my_voice.PlayInt(80); לא זוהה
   }
 }
 
@@ -92,29 +87,12 @@ void login_employee(String user_name)
   Serial.println(user_name);
   
   // print the details of the login employee.
-  Serial.print("enter time: ");
+  Serial.print("entrance time: ");
   char date[1024] = "";
   getDate(date);
   Serial.println(date);
 }
 
-void readUntil(char message[], char terminator)
-{
-  int i = 0;
-  while (true)
-  {
-    if (mySerial.available())
-    {
-      message[i] = mySerial.read();
-      if (message[i] == terminator)
-      {
-        message[i] = '\0';
-        break;
-      }
-      ++i;
-    }
-  }
-}
 
 void getDate(char date[])
 {
